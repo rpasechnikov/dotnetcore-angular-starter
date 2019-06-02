@@ -39,6 +39,7 @@ namespace Demo.API
                 app.UseHsts();
             }
 
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseMvc();
         }
     }

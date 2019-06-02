@@ -3,4 +3,6 @@
 # compiled output
 */bin
 */obj
+.vs
+/.vs
 */.vs

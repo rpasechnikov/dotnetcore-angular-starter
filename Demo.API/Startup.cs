@@ -1,8 +1,10 @@
-﻿using Demo.API.Services;
+﻿using Demo.API.Models;
+using Demo.API.Services;
 using Demo.API.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +26,11 @@ namespace Demo.API
 
             // Setup Dependency Injection
             services.AddTransient<IValuesService, ValuesService>();
+            services.AddTransient<IFruitService, FruitService>();
+
+            // Db
+            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=DemoDb;";
+            services.AddDbContext<DemoContext>(options => options.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

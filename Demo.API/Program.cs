@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore;
+﻿using Demo.API.Models;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Demo.API
 {
@@ -7,7 +10,27 @@ namespace Demo.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            // Migrate on startup
+            var host = CreateWebHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    // TODO: Remove these lines and implement a more robust migration in Jenkins
+                    var context = scope.ServiceProvider.GetService<DemoContext>();
+                    context.Database.Migrate();
+                }
+                catch
+                {
+                    // Catch all
+                }
+            }
+
+            // Start Service
+            host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
